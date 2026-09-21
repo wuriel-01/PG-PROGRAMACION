@@ -23,7 +23,6 @@ public class FormularioProducto extends JPanel {
         txtNombre= new JTextField();
         txtPrecio= new JTextField();
         txtStock= new JTextField();
-        txtNombre= new JTextField();
         cmbCategoria = new JComboBox<>();
 
 
@@ -75,6 +74,12 @@ public void eventoLimpiar() {
 btnLimpiar.addActionListener(e -> limpiar());
 }
    
+
+
+
+// GETTERS y SETTERS
+
+
 public String getNombre() {
     return txtNombre.getText().trim();
 }
@@ -90,6 +95,8 @@ public String getStock() {
 public String getCategoria() {
     return cmbCategoria.getSelectedItem().toString();
 }
+
+
 
 public void validacionNombre(){
      txtNombre.requestFocus();

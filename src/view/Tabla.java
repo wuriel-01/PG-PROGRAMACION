@@ -1,130 +1,172 @@
 package view;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import javax.swing.*;
 
 import Model.Producto;
 
 public class Tabla extends JPanel {
 
-    private JTable tabla;
-    private DefaultTableModel modelo;
-
-    private JButton btnEliminar;
+    private JPanel panelProductos;
     private JLabel lblTotal;
+    private double total = 0;
+
 
     public Tabla() {
 
         setLayout(new BorderLayout());
 
-        String[] columnas = {
-                "Nombre",
-                "Precio",
-                "Stock",
-                "Categoría",
-                "Valor Stock"
-        };
+        // Panel donde estarán todos los productos
+        panelProductos = new JPanel();
 
-        modelo = new DefaultTableModel(columnas, 0);
-
-        tabla = new JTable(modelo);
-
-        JScrollPane scrollTabla = new JScrollPane(tabla);
-
-        btnEliminar = new JButton("Eliminar");
-
-        lblTotal = new JLabel(
-                "Valor total del stock: $0.00");
-        JPanel panelInferior = new JPanel( new BorderLayout());
-
-        panelInferior.add(btnEliminar, BorderLayout.WEST);
-        panelInferior.add(lblTotal,BorderLayout.EAST);
-        add(scrollTabla,BorderLayout.CENTER);
-        add(panelInferior,BorderLayout.SOUTH);
-
-        btnEliminar.addActionListener(
-                e -> eliminarProducto()
+        panelProductos.setLayout(
+                new BoxLayout(
+                        panelProductos,
+                        BoxLayout.Y_AXIS
+                )
         );
+
+
+        // Scroll para cuando haya muchos productos
+        JScrollPane scroll = new JScrollPane(panelProductos);
+
+
+        // Total
+        lblTotal = new JLabel(
+                "Valor total del stock: $0.00"
+        );
+
+
+        add(scroll, BorderLayout.CENTER);
+
+        add(lblTotal, BorderLayout.SOUTH);
     }
+
+
+    // ========================================================
+    // AGREGAR PRODUCTO
+    // ========================================================
 
     public void agregarProducto(Producto producto) {
 
-        modelo.addRow(new Object[]{
-                producto.getNombre(),
-                producto.getPrecio(),
-                producto.getStock(),
-                producto.getCategoria(),
-                producto.getValorStock()
+        // Panel que representa UN producto
+        JPanel panelProducto = new JPanel();
+
+        panelProducto.setLayout(
+                new GridLayout(1, 7, 10, 10)
+        );
+
+
+        // Creamos los JLabel
+        JLabel lblNombre =
+                new JLabel(producto.getNombre());
+
+        JLabel lblPrecio =
+                new JLabel("$" + producto.getPrecio());
+
+        JLabel lblStock =
+                new JLabel(String.valueOf(producto.getStock()));
+
+        JLabel lblCategoria =
+                new JLabel(producto.getCategoria());
+
+        JLabel lblValorStock =
+                new JLabel("$" + producto.getValorStock());
+
+
+        // Botones
+        JButton btnEditar =
+                new JButton("Editar");
+
+        JButton btnEliminar =
+                new JButton("Eliminar");
+
+
+        // Agregamos todo
+        panelProducto.add(lblNombre);
+        panelProducto.add(lblPrecio);
+        panelProducto.add(lblStock);
+        panelProducto.add(lblCategoria);
+        panelProducto.add(lblValorStock);
+
+        panelProducto.add(btnEditar);
+        panelProducto.add(btnEliminar);
+
+
+        // Agregamos el producto a la lista
+        panelProductos.add(panelProducto);
+
+
+        // ====================================================
+        // EVENTO ELIMINAR
+        // ====================================================
+
+        btnEliminar.addActionListener(e -> {
+
+            panelProductos.remove(panelProducto);
+
+            actualizarTotal(-producto.getValorStock());
+
+            panelProductos.revalidate();
+            panelProductos.repaint();
         });
-        actualizarTotal();
+
+
+        // ====================================================
+        // EVENTO EDITAR
+        // ====================================================
+
+       btnEditar.addActionListener(e -> {
+
+    double valorAnterior = producto.getValorStock();
+
+    new VentanaEditar(producto, () -> {
+
+        double valorNuevo = producto.getValorStock();
+
+        double diferencia = valorNuevo - valorAnterior;
+
+        actualizarTotal(diferencia);
+
+        lblNombre.setText(producto.getNombre());
+
+        lblPrecio.setText(
+                "$" + producto.getPrecio()
+        );
+
+        lblStock.setText(
+                String.valueOf(producto.getStock())
+        );
+
+        lblCategoria.setText(
+                producto.getCategoria()
+        );
+
+        lblValorStock.setText(
+                "$" + producto.getValorStock()
+        );
+    });
+});
+
+
+        // Actualizamos total
+        actualizarTotal(producto.getValorStock());
+
+
+        // Actualizamos visualmente
+        panelProductos.revalidate();
+        panelProductos.repaint();
     }
 
 
+    // ========================================================
+    // ACTUALIZAR TOTAL
+    // ========================================================
 
+    private void actualizarTotal(double valor) {
 
-    private void eliminarProducto() {
+        total += valor;
 
-        int filaSeleccionada =
-                tabla.getSelectedRow();
-
-
-        if (filaSeleccionada == -1) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Debe seleccionar un producto.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-
-            return;
-        }
-
-
-        
-        int respuesta =
-                JOptionPane.showConfirmDialog(
-                        this,
-                        "¿Está seguro de eliminar el producto?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION
-                );
-
-
-        // Si respondió SÍ
-        if (respuesta == JOptionPane.YES_OPTION) {
-
-            modelo.removeRow(filaSeleccionada);
-
-            // Actualizamos el total
-            actualizarTotal();
-        }
-    }
-
-
-
-
-    private void actualizarTotal() {
-        double total = 0;
-  
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-
-            double valor =
-                    Double.parseDouble(
-                            modelo
-                                    .getValueAt(i, 4)
-                                    .toString()
-                    );
-
-            total += valor;
-        }
         lblTotal.setText(
                 String.format(
                         "Valor total del stock: $%.2f",
