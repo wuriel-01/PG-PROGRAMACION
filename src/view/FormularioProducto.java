@@ -1,112 +1,98 @@
 package view;
 
 import java.awt.GridLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import Model.Producto;
+import components.ComponenteCategoria;
+import components.ComponenteNombre;
+import components.ComponentePrecio;
+import components.ComponenteStock;
+
 public class FormularioProducto extends JPanel {
-    private JTextField txtNombre;
-    private JTextField txtPrecio;
-    private JTextField txtStock;
-    private JComboBox<String> cmbCategoria; 
+
+    private ComponenteNombre objetoNombre;
+    private ComponenteStock  objetoStock;
+    private ComponentePrecio  objetoPrecio;
+    private ComponenteCategoria objetoCategoria;
+   
+   
     private JButton btnAgregar;
     private JButton btnLimpiar;
-   
-    public FormularioProducto (){
+
+    public FormularioProducto() {
 
         setLayout(new GridLayout(5, 2, 10, 10));
 
-        txtNombre= new JTextField();
-        txtPrecio= new JTextField();
-        txtStock= new JTextField();
-        cmbCategoria = new JComboBox<>();
+        objetoNombre = new ComponenteNombre();
+        objetoStock= new ComponenteStock();
+        objetoPrecio= new ComponentePrecio();
+        objetoCategoria= new ComponenteCategoria();
+        
 
-
-        cmbCategoria.addItem("Almacén");
-        cmbCategoria.addItem("Bebidas");
-        cmbCategoria.addItem("Limpieza");
-        cmbCategoria.addItem("Verduleria");
-        cmbCategoria.addItem("Otros");
-
-   
-        add(new JLabel("Nombre:"));
-        add(txtNombre);
-        add(new JLabel("Precio:"));
-        add(txtPrecio);
-        add(new JLabel("Stock:"));
-        add(txtStock);
-        add(new JLabel("Categoria:"));
-        add(cmbCategoria);
-
-
-
+        add(objetoNombre);
+        add(objetoPrecio);
+        add(objetoStock);
+        add(objetoCategoria);
 
         btnAgregar = new JButton("Agregar");
         add(btnAgregar);
+
         btnLimpiar = new JButton("Limpiar");
         add(btnLimpiar);
-         
 
+        eventoLimpiar();
+    }
+
+   
+    public void eventoLimpiar() {
+        btnLimpiar.addActionListener(e->limpiarFormulario());
     }
 
 
-
-public void eventoAgregar(ActionListener evento) {
+   public void eventoAgregar(ActionListener evento) {
     btnAgregar.addActionListener(evento);
 }
 
-public void limpiar() {
+public Producto crearProducto() {
 
-    txtNombre.setText("");
-    txtPrecio.setText("");
-    txtStock.setText("");
+    if (!objetoNombre.validacionNombre()) {
+        return null;
+    }
 
-    cmbCategoria.setSelectedIndex(0);
+    if (!objetoPrecio.validacionPrecio()) {
+        return null;
+    }
 
-    txtNombre.requestFocus();
+    if (!objetoStock.validacionStock()) {
+        return null;
+    }
+
+    String nombre = objetoNombre.getNombre();
+    double precio = objetoPrecio.getPrecio();
+    int stock = objetoStock.getStock();
+    String categoria = objetoCategoria.getCategoria();
+
+    Producto producto = new Producto(
+            nombre,
+            precio,
+            stock,
+            categoria
+    );
+
+    return producto;
+
 }
+    public void limpiarFormulario(){
+            objetoNombre.limpiarNombre();
+            objetoStock.limpiarStock();
+            objetoPrecio.limpiarPrecio();
+        }
 
-public void eventoLimpiar() {
-btnLimpiar.addActionListener(e -> limpiar());
-}
    
-
-
-
-// GETTERS y SETTERS
-
-
-public String getNombre() {
-    return txtNombre.getText().trim();
-}
-
-public String getPrecio() {
-    return txtPrecio.getText().trim();
-}
-
-public String getStock() {
-    return txtStock.getText().trim();
-}
-
-public String getCategoria() {
-    return cmbCategoria.getSelectedItem().toString();
-}
-
-
-
-public void validacionNombre(){
-     txtNombre.requestFocus();
-}
-public void validacionPrecio(){
-    txtPrecio.requestFocus();
-}
-
-public void validacionStock(){
-  txtStock.requestFocus();
-}
 
 }

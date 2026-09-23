@@ -1,26 +1,34 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import Model.Producto;
+import components.ComponenteBuscador;
 
 public class Tabla extends JPanel {
 
     private JPanel panelProductos;
-    private JTextField txtBuscar;
     private JLabel lblTotal;
+
     private double total = 0;
+
     private ArrayList<Producto> listaProductos;
+
+    private ComponenteBuscador buscador;
 
     public Tabla() {
 
         setLayout(new BorderLayout());
 
+        listaProductos = new ArrayList<>();
         panelProductos = new JPanel();
 
         panelProductos.setLayout(
@@ -30,102 +38,41 @@ public class Tabla extends JPanel {
                 )
         );
 
-        JScrollPane scroll = new JScrollPane(panelProductos);
+        buscador = new ComponenteBuscador(panelProductos);
+        JScrollPane scroll =
+                new JScrollPane(panelProductos);
 
-        lblTotal = new JLabel(
-                "Valor total del stock: $0.00"
-        );
-
-        txtBuscar = new JTextField();
-
-        listaProductos = new ArrayList<>();
-
-        add(txtBuscar, BorderLayout.NORTH);
+        lblTotal =
+                new JLabel("Valor total del stock: $0.00");
+        add(buscador, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(lblTotal, BorderLayout.SOUTH);
-
-        BuscarProducto();
-    }
-
-
-    public void BuscarProducto() {
-
-        txtBuscar.getDocument().addDocumentListener(
-                new DocumentListener() {
-
-                    @Override
-                    public void insertUpdate(DocumentEvent e) {
-                        filtrarProductos();
-                    }
-
-                    @Override
-                    public void removeUpdate(DocumentEvent e) {
-                        filtrarProductos();
-                    }
-
-                    @Override
-                    public void changedUpdate(DocumentEvent e) {
-                        filtrarProductos();
-                    }
-                }
-        );
-    }
-
-
-    private void filtrarProductos() {
-
-        String nombreBuscado =
-                txtBuscar.getText().toLowerCase();
-
-        for (Component componente : panelProductos.getComponents()) {
-
-            String nombreProducto = componente.getName();
-
-            if (nombreProducto != null) {
-
-                if (nombreProducto.toLowerCase().contains(nombreBuscado)) {
-                    componente.setVisible(true);
-                } else {
-                    componente.setVisible(false);
-                }
-            }
-        }
-
-        panelProductos.revalidate();
-        panelProductos.repaint();
     }
 
 
     public void agregarProducto(Producto producto) {
 
+        
         JPanel panelProducto = new JPanel();
 
-        panelProducto.setLayout(
-                new GridLayout(1, 7, 10, 10)
-        );
+        panelProducto.setLayout(new GridLayout(1, 7, 10, 10));
 
         panelProducto.setName(producto.getNombre());
 
-        JLabel lblNombre =
-                new JLabel(producto.getNombre());
+        JLabel lblNombre =new JLabel(producto.getNombre());
 
-        JLabel lblPrecio =
-                new JLabel("$" + producto.getPrecio());
+        JLabel lblPrecio =new JLabel("$" + producto.getPrecio());
 
         JLabel lblStock =
-                new JLabel(String.valueOf(producto.getStock()));
+                new JLabel( String.valueOf(producto.getStock()));
 
-        JLabel lblCategoria =
-                new JLabel(producto.getCategoria());
+        JLabel lblCategoria =new JLabel(producto.getCategoria());
 
-        JLabel lblValorStock =
-                new JLabel("$" + producto.getValorStock());
+        JLabel lblValorStock =new JLabel("$" + producto.getValorStock());
 
-        JButton btnEditar =
-                new JButton("Editar");
+        JButton btnEditar =new JButton("Editar");
 
-        JButton btnEliminar =
-                new JButton("Eliminar");
+        JButton btnEliminar =new JButton("Eliminar");
 
         listaProductos.add(producto);
 
@@ -134,12 +81,10 @@ public class Tabla extends JPanel {
         panelProducto.add(lblStock);
         panelProducto.add(lblCategoria);
         panelProducto.add(lblValorStock);
-
         panelProducto.add(btnEditar);
         panelProducto.add(btnEliminar);
 
         panelProductos.add(panelProducto);
-
 
         btnEliminar.addActionListener(e -> {
 
@@ -147,7 +92,7 @@ public class Tabla extends JPanel {
 
             listaProductos.remove(producto);
 
-            actualizarTotal(-producto.getValorStock());
+            actualizarTotal( -producto.getValorStock());
 
             panelProductos.revalidate();
             panelProductos.repaint();
@@ -156,47 +101,42 @@ public class Tabla extends JPanel {
 
         btnEditar.addActionListener(e -> {
 
-            double valorAnterior = producto.getValorStock();
+            double valorAnterior =
+                    producto.getValorStock();
 
-            new VentanaEditar(producto, () -> {
+            new VentanaEditar( producto,() -> {
 
-                double valorNuevo = producto.getValorStock();
+                        double valorNuevo = producto.getValorStock();
 
-                double diferencia = valorNuevo - valorAnterior;
+                        double diferencia =valorNuevo - valorAnterior;
 
-                actualizarTotal(diferencia);
+                        actualizarTotal(diferencia);
 
-                lblNombre.setText(producto.getNombre());
+                        lblNombre.setText(
+                                producto.getNombre());
+                        lblPrecio.setText("$" + producto.getPrecio());
 
-                lblPrecio.setText(
-                        "$" + producto.getPrecio()
-                );
+                        lblStock.setText( String.valueOf(producto.getStock()));
 
-                lblStock.setText(
-                        String.valueOf(producto.getStock())
-                );
+                        lblCategoria.setText( producto.getCategoria());
 
-                lblCategoria.setText(
-                        producto.getCategoria()
-                );
+                        lblValorStock.setText("$" + producto.getValorStock());
 
-                lblValorStock.setText(
-                        "$" + producto.getValorStock()
-                );
-
-                panelProducto.setName(producto.getNombre());
-
-                filtrarProductos();
-            });
+                        panelProducto.setName(
+                                producto.getNombre()
+                        );
+                    }
+            );
         });
 
 
-        actualizarTotal(producto.getValorStock());
+        actualizarTotal(
+                producto.getValorStock()
+        );
 
         panelProductos.revalidate();
         panelProductos.repaint();
     }
-
 
     private void actualizarTotal(double valor) {
 
@@ -205,8 +145,5 @@ public class Tabla extends JPanel {
         lblTotal.setText(
                 String.format(
                         "Valor total del stock: $%.2f",
-                        total
-                )
-        );
-    }
-}
+                        total));
+                }}

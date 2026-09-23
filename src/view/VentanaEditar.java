@@ -5,13 +5,17 @@ import java.awt.GridLayout;
 import javax.swing.*;
 
 import Model.Producto;
+import components.ComponenteCategoria;
+import components.ComponenteNombre;
+import components.ComponentePrecio;
+import components.ComponenteStock;
 
 public class VentanaEditar extends JFrame {
 
-    private JTextField txtNombre;
-    private JTextField txtPrecio;
-    private JTextField txtStock;
-    private JComboBox<String> cmbCategoria;
+    private ComponenteNombre objetoNombreEditar;
+    private ComponentePrecio objetoPrecioEditar;
+    private ComponenteStock objetoStockEditar;
+    private ComponenteCategoria objetoCategoriaEditar;
     private JButton confirmar;
     private JButton cancelar;
     private Producto producto;
@@ -26,27 +30,15 @@ public class VentanaEditar extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        txtNombre = new JTextField(producto.getNombre());
-        txtPrecio = new JTextField(String.valueOf(producto.getPrecio()));
-        txtStock = new JTextField(String.valueOf(producto.getStock()));
-        cmbCategoria = new JComboBox<>();
+        objetoNombreEditar = new ComponenteNombre(producto.getNombre());
+        objetoPrecioEditar = new ComponentePrecio(producto.getPrecio());
+        objetoStockEditar= new ComponenteStock(producto.getStock());
+        objetoCategoriaEditar = new ComponenteCategoria(producto.getCategoria());
 
-        cmbCategoria.addItem("Almacén");
-        cmbCategoria.addItem("Bebidas");
-        cmbCategoria.addItem("Limpieza");
-        cmbCategoria.addItem("Verduleria");
-        cmbCategoria.addItem("Otros");
-
-        cmbCategoria.setSelectedItem(producto.getCategoria());
-
-        add(new JLabel("Nombre:"));
-        add(txtNombre);
-        add(new JLabel("Precio:"));
-        add(txtPrecio);
-        add(new JLabel("Stock:"));
-        add(txtStock);
-        add(new JLabel("Categoria:"));
-        add(cmbCategoria);
+        add(objetoNombreEditar);
+        add(objetoPrecioEditar);
+        add(objetoStockEditar);
+        add(objetoCategoriaEditar);
 
         confirmar = new JButton("Confirmar");
         add(confirmar);
@@ -66,10 +58,10 @@ public class VentanaEditar extends JFrame {
 
     confirmar.addActionListener(e -> {
 
-        String nuevoNombre = txtNombre.getText();
-        double nuevoPrecio = Double.parseDouble(txtPrecio.getText());
-        int nuevoStock = Integer.parseInt(txtStock.getText());
-        String nuevaCategoria = cmbCategoria.getSelectedItem().toString();
+        String nuevoNombre = objetoNombreEditar.getNombre();
+        double nuevoPrecio = objetoPrecioEditar.getPrecio();
+        int nuevoStock = objetoStockEditar.getStock();
+        String nuevaCategoria = objetoCategoriaEditar.getCategoria();
 
         producto.setName(nuevoNombre);
         producto.setCategoria(nuevaCategoria);

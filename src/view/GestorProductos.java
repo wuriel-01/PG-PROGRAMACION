@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import Model.Producto;
+import components.ComponenteNombre;
 
 public class GestorProductos extends JFrame {
 
@@ -33,9 +34,8 @@ public class GestorProductos extends JFrame {
 
         // Creamos la interfaz
         crearInterfaz();
+        formulario.eventoAgregar(e -> agregarProducto());
 
-        // Configuramos los eventos
-        crearEventos();
     }
 
 
@@ -54,167 +54,27 @@ public class GestorProductos extends JFrame {
         add(tablaProductos, BorderLayout.CENTER);
     }
 
-
-    // ========================================================
-    // CREAR EVENTOS
-    // ========================================================
-
-    private void crearEventos() {
-
-        // Cuando presionamos Agregar
-        formulario.eventoAgregar(e -> agregarProducto());
-        formulario.eventoLimpiar();
-    }
-
-
-    // ========================================================
     // AGREGAR PRODUCTO
-    // ========================================================
-
     private void agregarProducto() {
 
-        // Obtenemos los datos del formulario
-        String nombre = formulario.getNombre();
-        String precioTexto = formulario.getPrecio();
-        String stockTexto = formulario.getStock();
-        String categoria = formulario.getCategoria();
+    Producto producto = formulario.crearProducto();
 
-
-        // ====================================================
-        // VALIDAR NOMBRE
-        // ====================================================
-
-        if (nombre.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Debe ingresar el nombre del producto.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            formulario.validacionNombre();
-            return;
-        }
-
-
-        double precio;
-        int stock;
-
-
-        // ====================================================
-        // CONVERTIR PRECIO
-        // ====================================================
-
-        try {
-
-            precio = Double.parseDouble(precioTexto);
-
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El precio debe ser un número válido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            formulario.validacionPrecio();
-            return;
-        }
-
-
-        // ====================================================
-        // CONVERTIR STOCK
-        // ====================================================
-
-        try {
-
-            stock = Integer.parseInt(stockTexto);
-
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El stock debe ser un número entero.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-             formulario.validacionStock();
-            return;
-        }
-
-
-        // ====================================================
-        // VALIDAR PRECIO
-        // ====================================================
-
-        if (precio <= 0) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El precio debe ser mayor que cero.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-            return;
-        }
-
-
-        // ====================================================
-        // VALIDAR STOCK
-        // ====================================================
-
-        if (stock < 0) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El stock no puede ser negativo.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-            return;
-        }
-
-
-        // ====================================================
-        // CREAR PRODUCTO
-        // ====================================================
-
-        Producto producto = new Producto(
-                nombre,
-                precio,
-                stock,
-                categoria
-        );
-
-
-        // ====================================================
-        // AGREGAR PRODUCTO A LA TABLA
-        // ====================================================
-
-        tablaProductos.agregarProducto(producto);
-
-
-        // ====================================================
-        // LIMPIAR FORMULARIO
-        // ====================================================
-
-        formulario.limpiar();;
-
-
-        // ====================================================
-        // MENSAJE
-        // ====================================================
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Producto agregado correctamente.",
-                "Información",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+    if (producto == null) {
+        return;
     }
 
+    tablaProductos.agregarProducto(producto);
+
+    formulario.limpiarFormulario();
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Producto agregado correctamente.",
+            "Información",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+}
+    
 
     // ========================================================
     // MAIN
