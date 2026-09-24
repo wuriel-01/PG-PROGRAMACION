@@ -7,18 +7,13 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import Model.Producto;
-import components.ComponenteNombre;
+
 
 public class GestorProductos extends JFrame {
 
     // Componentes principales de nuestra ventana
     private FormularioProducto formulario;
     private Tabla tablaProductos;
-
-
-    // ========================================================
-    // CONSTRUCTOR
-    // ========================================================
 
     public GestorProductos() {
 
@@ -37,11 +32,6 @@ public class GestorProductos extends JFrame {
         formulario.eventoAgregar(e -> agregarProducto());
 
     }
-
-
-    // ========================================================
-    // CREAR INTERFAZ
-    // ========================================================
 
     private void crearInterfaz() {
 
@@ -74,13 +64,7 @@ public class GestorProductos extends JFrame {
             JOptionPane.INFORMATION_MESSAGE
     );
 }
-    
-
-    // ========================================================
-    // MAIN
-    // ========================================================
-
-    public static void main(String[] args) {
+        public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
 
