@@ -1,67 +1,63 @@
 package components;
 
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import javax.swing.*;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+public class ComponentePrecio extends JPanel {
+    private final JTextField txtPrecio;
 
-public class ComponentePrecio extends JPanel{
-    private JTextField CampoPrecio;
+    public ComponentePrecio() {
+        // Establecer alineación a la izquierda
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-    public ComponentePrecio (){
-       
-        CampoPrecio = new JTextField();
-        setLayout(new GridLayout(1, 2, 10, 0));
         add(new JLabel("Precio:"));
-        add(CampoPrecio);
+        txtPrecio = new JTextField(10);
+        add(txtPrecio);
     }
 
-    public ComponentePrecio(double precio){
+    public ComponentePrecio(double precio) {
         this();
-    CampoPrecio.setText(String.valueOf(precio));
+        txtPrecio.setText(String.valueOf(precio));
     }
 
-      public double getPrecio() {
-       return Double.parseDouble(CampoPrecio.getText().trim());
+    public String getTexto() {
+        return txtPrecio.getText().trim();
     }
 
-    public void limpiarPrecio(){
-        CampoPrecio.setText("");
+    private double parsearPrecio() {
+        String texto = getTexto();
+        if (!texto.matches("(?:[0-9]+(?:[.,][0-9]*)?|[.,][0-9]+)")) {
+            throw new NumberFormatException("Formato decimal inválido");
+        }
+        // Acepta coma decimal además del punto.
+        return Double.parseDouble(texto.replace(',', '.'));
     }
-     
 
-    double precio;
-     public boolean validacionPrecio() {
+    public boolean esValido() {
         try {
-
-            precio = Double.parseDouble(CampoPrecio.getText().trim());
-
+            double precio = parsearPrecio();
+            return Double.isFinite(precio) && precio > 0;
         } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El precio debe ser un número válido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            CampoPrecio.requestFocus();
             return false;
         }
+    }
 
+    public double getPrecio() {
+        return parsearPrecio();
+    }
 
-           if (precio <= 0) {
+    public boolean validacionPrecio() {
+        if (esValido()) return true;
+        JOptionPane.showMessageDialog(this, "Ingrese un precio mayor que cero. Puede usar coma o punto decimal.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+        txtPrecio.requestFocusInWindow();
+        return false;
+    }
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El precio debe ser mayor que cero.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-             CampoPrecio.requestFocus();
-            return false;
-        }
-        return true;
+    public void limpiarPrecio() {
+        limpiar();
+    }
+
+    public void limpiar() {
+        txtPrecio.setText("");
     }
 }

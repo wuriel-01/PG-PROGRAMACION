@@ -1,58 +1,49 @@
 package components;
 
-import java.awt.GridLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import javax.swing.*;
 
 public class ComponenteNombre extends JPanel {
-
-    private JTextField CampoNombre;
+    private final JTextField txtNombre;
 
     public ComponenteNombre() {
-          
+        // Establecer alineación a la izquierda
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        CampoNombre = new JTextField();
-        setLayout(new GridLayout(1, 2, 10, 0));
         add(new JLabel("Nombre:"));
-        add(CampoNombre);
+        txtNombre = new JTextField(15);
+        add(txtNombre);
     }
 
     public ComponenteNombre(String nombre) {
-
         this();
+        txtNombre.setText(nombre == null ? "" : nombre);
+    }
 
-        CampoNombre.setText(nombre);
+    public String getTexto() {
+        return txtNombre.getText().trim();
+    }
+
+    public boolean esValido() {
+        return !getTexto().isEmpty();
     }
 
     public String getNombre() {
-        return CampoNombre.getText().trim();
+        return getTexto();
+    }
+
+    public boolean validacionNombre() {
+        if (esValido()) return true;
+        JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+        txtNombre.requestFocusInWindow();
+        return false;
     }
 
     public void limpiarNombre() {
-    CampoNombre.setText("");
-}
+        limpiar();
+    }
 
-    public boolean validacionNombre() {
-
-        String nombre = CampoNombre.getText().trim();
-
-        if (nombre.isEmpty()) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Debe ingresar el nombre del producto.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-            CampoNombre.requestFocus();
-
-            return false;
-        }
-
-        return true;
+    public void limpiar() {
+        txtNombre.setText("");
     }
 }

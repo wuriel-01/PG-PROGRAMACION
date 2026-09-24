@@ -1,64 +1,70 @@
 package Model;
-// ============================================================
-// CLASE PRODUCTO
-// ============================================================
 
-// Esta clase representa un producto del comercio.
+/** Representa un producto del comercio. */
 public class Producto {
 
-    // Atributos privados del producto.
+    private String codigoBarras;
     private String nombre;
     private double precio;
     private int stock;
     private String categoria;
 
-    // Constructor: permite crear un Producto con sus datos iniciales.
+    /** Crea un producto sin código de barras. */
     public Producto(String nombre, double precio, int stock, String categoria) {
+        this(null, nombre, precio, stock, categoria);
+    }
+
+    /** Crea un producto con todos sus datos. */
+    public Producto(String codigoBarras, String nombre, double precio, int stock, String categoria) {
+        this.codigoBarras = codigoBarras;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
     }
 
-    // Devuelve el nombre del producto.
+    public String getCodigoBarras() {
+        return codigoBarras;
+    }
+
+    public void setCodigoBarras(String codigoBarras) {
+        this.codigoBarras = codigoBarras;
+    }
+
     public String getNombre() {
         return nombre;
     }
 
-    // Devuelve el precio del producto.
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public double getPrecio() {
         return precio;
     }
 
-    // Devuelve el stock disponible.
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     public int getStock() {
         return stock;
     }
 
-    // Devuelve la categoría.
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
     public String getCategoria() {
         return categoria;
     }
 
-    // Calcula el valor total del stock de este producto.
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    /** Devuelve el valor total del stock disponible. */
     public double getValorStock() {
         return precio * stock;
-    }
-
-
-    public void setName(String nombre){
-        this.nombre= nombre;
-    }
-
-    public void setPrecio(double precio){
-        this.precio= precio;
-    }
-
-    public void setCategoria( String categoria){
-        this.categoria=categoria;
-    }
-
-    public void setStock(int stock){
-        this.stock=stock;
     }
 }
