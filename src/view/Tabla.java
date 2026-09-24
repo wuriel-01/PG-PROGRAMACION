@@ -2,7 +2,9 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,135 +17,130 @@ import components.ComponenteBuscador;
 
 public class Tabla extends JPanel {
 
-    private JPanel panelProductos;
-    private JLabel lblTotal;
-
-    private double total = 0;
-
-    private ArrayList<Producto> listaProductos;
-
-    private ComponenteBuscador buscador;
+    private final JPanel panelProductos;
+    private final JLabel lblTotal;
+    private final ArrayList<Producto> listaProductos;
+    private final NumberFormat formatoMoneda;
 
     public Tabla() {
-
-        setLayout(new BorderLayout());
-
+        setLayout(new BorderLayout(0, 8));
         listaProductos = new ArrayList<>();
+        formatoMoneda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("es-AR"));
         panelProductos = new JPanel();
+        panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
-        panelProductos.setLayout(
-                new BoxLayout(
-                        panelProductos,
-                        BoxLayout.Y_AXIS
-                )
-        );
+        JPanel encabezado = new JPanel(new GridLayout(1, 8, 8, 4));
+        encabezado.add(new JLabel("Código"));
+        encabezado.add(new JLabel("Nombre"));
+        encabezado.add(new JLabel("Precio"));
+        encabezado.add(new JLabel("Stock"));
+        encabezado.add(new JLabel("Categoría"));
+        encabezado.add(new JLabel("Valor stock"));
+        encabezado.add(new JLabel("Editar"));
+        encabezado.add(new JLabel("Eliminar"));
 
-        buscador = new ComponenteBuscador(panelProductos);
-        JScrollPane scroll =
-                new JScrollPane(panelProductos);
-
-        lblTotal =
-                new JLabel("Valor total del stock: $0.00");
-        add(buscador, BorderLayout.NORTH);
-        add(scroll, BorderLayout.CENTER);
+        JPanel superior = new JPanel(new BorderLayout(0, 4));
+        superior.add(new ComponenteBuscador(panelProductos), BorderLayout.NORTH);
+        superior.add(encabezado, BorderLayout.SOUTH);
+        add(superior, BorderLayout.NORTH);
+        add(new JScrollPane(panelProductos), BorderLayout.CENTER);
+        lblTotal = new JLabel();
         add(lblTotal, BorderLayout.SOUTH);
+        actualizarTotal();
     }
 
-
     public void agregarProducto(Producto producto) {
-
-        
-        JPanel panelProducto = new JPanel();
-
-        panelProducto.setLayout(new GridLayout(1, 7, 10, 10));
-
-        panelProducto.setName(producto.getNombre());
-
-        JLabel lblNombre =new JLabel(producto.getNombre());
-
-        JLabel lblPrecio =new JLabel("$" + producto.getPrecio());
-
-        JLabel lblStock =
-                new JLabel( String.valueOf(producto.getStock()));
-
-        JLabel lblCategoria =new JLabel(producto.getCategoria());
-
-        JLabel lblValorStock =new JLabel("$" + producto.getValorStock());
-
-        JButton btnEditar =new JButton("Editar");
-
-        JButton btnEliminar =new JButton("Eliminar");
-
+        if (producto == null) {
+            return;
+        }
         listaProductos.add(producto);
+        dibujarLista();
+    }
 
-        panelProducto.add(lblNombre);
-        panelProducto.add(lblPrecio);
-        panelProducto.add(lblStock);
-        panelProducto.add(lblCategoria);
-        panelProducto.add(lblValorStock);
-        panelProducto.add(btnEditar);
-        panelProducto.add(btnEliminar);
+    // ========================================================
+    // MÉTODO NUEVO: BUSCAR POR CÓDIGO DE BARRAS
+    // ========================================================
+   public Producto buscarPorCodigoBarras(String codigoBarras) {
 
-        panelProductos.add(panelProducto);
+    if (codigoBarras == null || codigoBarras.trim().isEmpty()) {
+        return null;
+    }
 
-        btnEliminar.addActionListener(e -> {
+    for (Producto p : listaProductos) {
 
-            panelProductos.remove(panelProducto);
+        if (codigoBarras.equalsIgnoreCase(p.getCodigoBarras())) {
+            return p;
+        }
+    }
 
-            listaProductos.remove(producto);
+    return null;
+}
+    // ========================================================
+    // MÉTODO NUEVO: REFRESCAR / ACTUALIZAR TABLA
+    // ========================================================
+    public void actualizarTabla() {
+        dibujarLista();
+    }
 
-            actualizarTotal( -producto.getValorStock());
+    // Redibuja todos los elementos de la lista en pantalla
+    private void dibujarLista() {
+        panelProductos.removeAll();
 
-            panelProductos.revalidate();
-            panelProductos.repaint();
-        });
+        for (Producto producto : listaProductos) {
+            JPanel fila = new JPanel(new GridLayout(1, 8, 8, 4));
+            JLabel lblCodigo = new JLabel(codigoVisible(producto.getCodigoBarras()));
+            JLabel lblNombre = new JLabel(producto.getNombre());
+            JLabel lblPrecio = new JLabel(formatear(producto.getPrecio()));
+            JLabel lblStock = new JLabel(String.valueOf(producto.getStock()));
+            JLabel lblCategoria = new JLabel(producto.getCategoria());
+            JLabel lblValorStock = new JLabel(formatear(producto.getValorStock()));
+            JButton btnEditar = new JButton("Editar");
+            JButton btnEliminar = new JButton("Eliminar");
 
+            fila.setName(producto.getNombre());
+            fila.add(lblCodigo);
+            fila.add(lblNombre);
+            fila.add(lblPrecio);
+            fila.add(lblStock);
+            fila.add(lblCategoria);
+            fila.add(lblValorStock);
+            fila.add(btnEditar);
+            fila.add(btnEliminar);
 
-        btnEditar.addActionListener(e -> {
+            btnEliminar.addActionListener(e -> {
+                listaProductos.remove(producto);
+                dibujarLista();
+            });
 
-            double valorAnterior =
-                    producto.getValorStock();
+            btnEditar.addActionListener(e -> new VentanaEditar(producto, () -> {
+                dibujarLista();
+            }));
 
-            new VentanaEditar( producto,() -> {
+            panelProductos.add(fila);
+        }
 
-                        double valorNuevo = producto.getValorStock();
-
-                        double diferencia =valorNuevo - valorAnterior;
-
-                        actualizarTotal(diferencia);
-
-                        lblNombre.setText(
-                                producto.getNombre());
-                        lblPrecio.setText("$" + producto.getPrecio());
-
-                        lblStock.setText( String.valueOf(producto.getStock()));
-
-                        lblCategoria.setText( producto.getCategoria());
-
-                        lblValorStock.setText("$" + producto.getValorStock());
-
-                        panelProducto.setName(
-                                producto.getNombre()
-                        );
-                    }
-            );
-        });
-
-
-        actualizarTotal(
-                producto.getValorStock()
-        );
-
+        actualizarTotal();
         panelProductos.revalidate();
         panelProductos.repaint();
     }
 
-    private void actualizarTotal(double valor) {
+    private String formatear(double importe) {
+        return formatoMoneda.format(importe);
+    }
 
-        total += valor;
+   private String codigoVisible(String codigo) {
 
-        lblTotal.setText(
-                String.format(
-                        "Valor total del stock: $%.2f",
-                        total));
-                }}
+    if (codigo == null || codigo.trim().isEmpty()) {
+        return "—";
+    }
+    return codigo;
+}
+
+    private void actualizarTotal() {
+        double total = 0;
+        for (Producto producto : listaProductos) {
+            total += producto.getValorStock();
+        }
+        lblTotal.setText("Valor total del stock: " + formatear(total));
+    }
+}

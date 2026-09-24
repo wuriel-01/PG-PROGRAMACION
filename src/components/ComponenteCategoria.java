@@ -1,15 +1,18 @@
 package components;
 
+import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ComponenteCategoria extends JPanel {
 
     private JComboBox<String> cmbCategoria;
 
-    
     public ComponenteCategoria() {
+        // Establecer alineación a la izquierda
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
         cmbCategoria = new JComboBox<>();
 
@@ -23,15 +26,26 @@ public class ComponenteCategoria extends JPanel {
         add(cmbCategoria);
     }
 
-   
     public ComponenteCategoria(String categoriaSeleccionada) {
-
         this();
-
         cmbCategoria.setSelectedItem(categoriaSeleccionada);
     }
 
     public String getCategoria() {
-        return cmbCategoria.getSelectedItem().toString();
+        Object seleccion = cmbCategoria.getSelectedItem();
+        return seleccion == null ? "" : seleccion.toString();
+    }
+
+    public boolean validacionCategoria() {
+        if (getCategoria().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            cmbCategoria.requestFocusInWindow();
+            return false;
+        }
+        return true;
+    }
+
+    public void limpiarCategoria() {
+        cmbCategoria.setSelectedIndex(0);
     }
 }

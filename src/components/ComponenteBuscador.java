@@ -1,6 +1,7 @@
 package components;
 
 import java.awt.Component;
+import java.util.Locale;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -47,8 +48,7 @@ public class ComponenteBuscador extends JPanel {
 
     private void filtrarProductos() {
 
-        String nombreBuscado =
-                txtBuscar.getText().toLowerCase();
+        String nombreBuscado = txtBuscar.getText().trim().toLowerCase(Locale.ROOT);
 
         for (Component componente : panelProductos.getComponents()) {
 
@@ -56,7 +56,7 @@ public class ComponenteBuscador extends JPanel {
 
             if (nombreProducto != null) {
 
-                if (nombreProducto.toLowerCase().contains(nombreBuscado)) {
+                if (nombreProducto.toLowerCase(Locale.ROOT).contains(nombreBuscado)) {
                     componente.setVisible(true);
                 } else {
                     componente.setVisible(false);

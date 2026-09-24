@@ -1,18 +1,23 @@
-## Getting Started
+# Gestor de productos
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Aplicación de escritorio Java Swing para cargar, buscar, editar y eliminar productos. El valor del stock se calcula como precio por cantidad.
 
-## Folder Structure
+## Requisitos
 
-The workspace contains two folders by default, where:
+- JDK instalado (incluye `javac` y `java`).
+- En VS Code, la extensión **Extension Pack for Java** para usar el botón **Run**.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Ejecutar desde VS Code
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Abrí `src/view/GestorProductos.java` y elegí **Run** sobre el método `main`.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Compilar y ejecutar desde PowerShell
 
-## Dependency Management
+Desde la carpeta del proyecto:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+```powershell
+javac -encoding UTF-8 -d bin (Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName })
+java -cp bin view.GestorProductos
+```
+
+Los productos se mantienen en memoria mientras la aplicación está abierta; al cerrarla, se borran.
