@@ -8,7 +8,7 @@ public class ComponenteStock extends JPanel {
 
     // Constructor sin parámetros
     public ComponenteStock() {
-        this(0);
+        this(0); 
     }
 
     // Constructor con parámetro (para cuando se edita un producto)

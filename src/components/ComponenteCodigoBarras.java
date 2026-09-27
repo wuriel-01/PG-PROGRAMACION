@@ -36,9 +36,6 @@ public class ComponenteCodigoBarras extends JPanel {
         return getTexto();
     }
 
-    // ========================================================
-    // VALIDACIÓN COMPLETA Y CON MENSAJES DE ERROR AL USUARIO
-    // ========================================================
     public boolean validacionCodigoBarras() {
         String codigo = getTexto();
 

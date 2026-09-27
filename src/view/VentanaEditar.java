@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 
 import javax.swing.*;
 
+import Model.GestorMovimientos;
+import Model.Movimientos;
 import Model.Producto;
 import components.ComponenteCategoria;
 import components.ComponenteCodigoBarras;
@@ -21,7 +23,7 @@ public class VentanaEditar extends JFrame {
     private JButton confirmar;
     private JButton cancelar;
     private Producto producto;
-
+    private Movimientos movimientos;
     public VentanaEditar(Producto producto, Runnable alConfirmar) {
 
         this.producto = producto;
@@ -70,16 +72,28 @@ public class VentanaEditar extends JFrame {
             return;
         }
 
+        String nombreAnterior = producto.getNombre();
+        String codigoAnterior = producto.getCodigoBarras();
+        int stockAnterior = producto.getStock();
+        double precioAnterior = producto.getPrecio();
+        String categoriaAnterior = producto.getCategoria();
+        
         String nuevoNombre = objetoNombreEditar.getNombre();
         double nuevoPrecio = objetoPrecioEditar.getPrecio();
         int nuevoStock = objetoStockEditar.getStock();
         String nuevaCategoria = objetoCategoriaEditar.getCategoria();
-
+        
         producto.setNombre(nuevoNombre);
         producto.setCodigoBarras(objetoCodigoBarrasEditar.getCodigoBarras());
         producto.setCategoria(nuevaCategoria);
         producto.setPrecio(nuevoPrecio);
         producto.setStock(nuevoStock);
+
+        movimientos = new Movimientos(producto);
+        movimientos.CamposMoviminetos(nombreAnterior, codigoAnterior, stockAnterior,
+                                    precioAnterior, categoriaAnterior);
+
+        GestorMovimientos.agregarMovimiento(movimientos);
 
         alConfirmar.run();
 

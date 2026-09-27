@@ -2,26 +2,30 @@ package Model;
 
 /** Representa un producto del comercio. */
 public class Producto {
-
+    private String ID;
     private String codigoBarras;
     private String nombre;
     private double precio;
     private int stock;
     private String categoria;
-
+   
     
-    public Producto(String nombre, double precio, int stock, String categoria) {
-        this(null, nombre, precio, stock, categoria);
+    public Producto(String nombre, double precio, int stock, String categoria, String id) {
+        this(null, nombre, precio, stock, categoria, id);
     }
 
     /** Crea un producto con todos sus datos. */
-    public Producto(String codigoBarras, String nombre, double precio, int stock, String categoria) {
+    public Producto(String codigoBarras, String nombre, double precio, int stock, String categoria, String id) {
         this.codigoBarras = codigoBarras;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
+        this.ID= id;
     }
+
+
+
 
     public String getCodigoBarras() {
         return codigoBarras;
@@ -29,6 +33,10 @@ public class Producto {
 
     public void setCodigoBarras(String codigoBarras) {
         this.codigoBarras = codigoBarras;
+    }
+
+    public String getId(){
+        return ID;
     }
 
     public String getNombre() {

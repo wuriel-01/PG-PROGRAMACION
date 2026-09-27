@@ -96,6 +96,7 @@ public class Tabla extends JPanel {
             JLabel lblValorStock = new JLabel(formatear(producto.getValorStock()));
             JButton btnEditar = new JButton("Editar");
             JButton btnEliminar = new JButton("Eliminar");
+            JButton btnMovimientos= new JButton("Movimientos");
 
             fila.setName(producto.getNombre());
             fila.add(lblCodigo);
@@ -106,6 +107,7 @@ public class Tabla extends JPanel {
             fila.add(lblValorStock);
             fila.add(btnEditar);
             fila.add(btnEliminar);
+            fila.add(btnMovimientos);
 
             btnEliminar.addActionListener(e -> {
                 listaProductos.remove(producto);
@@ -115,6 +117,8 @@ public class Tabla extends JPanel {
             btnEditar.addActionListener(e -> new VentanaEditar(producto, () -> {
                 dibujarLista();
             }));
+
+              btnMovimientos.addActionListener(e -> new VentanaMovimientos(producto));
 
             panelProductos.add(fila);
         }

@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -113,8 +114,9 @@ public class FormularioProducto extends JPanel {
         double precio = objetoPrecio.getPrecio();
         int stock = objetoStock.getStock();
         String categoria = objetoCategoria.getCategoria();
+        String id= UUID.randomUUID().toString();
 
-        return new Producto(codigoBarras, nombre, precio, stock, categoria);
+        return new Producto(codigoBarras, nombre, precio, stock, categoria, id);
     }
 
     public void limpiarFormulario() {
