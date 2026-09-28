@@ -7,12 +7,7 @@ public class Cambio {
     private String valorNuevo;
     private String uuid;
 
-    public Cambio(
-            String campo,
-            String valorNuevo,
-            String valorAnterior,
-            String uuid
-    ) {
+    public Cambio(String campo ,String valorNuevo ,String valorAnterior ,String uuid) {
         this.campo = campo;
         this.valorAnterior = valorAnterior;
         this.valorNuevo = valorNuevo;

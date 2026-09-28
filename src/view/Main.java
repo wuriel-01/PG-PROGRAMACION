@@ -9,34 +9,31 @@ import javax.swing.SwingUtilities;
 import Model.Producto;
 
 
-public class GestorProductos extends JFrame {
+public class Main extends JFrame {
 
     // Componentes principales de nuestra ventana
     private FormularioProducto formulario;
     private Tabla tablaProductos;
 
-    public GestorProductos() {
+    public Main() {
 
-        // Creamos el formulario y la tabla
+        
         formulario = new FormularioProducto();
         tablaProductos = new Tabla();
 
-        // Configuración de la ventana
+        
         setTitle("Gestor de Productos");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Creamos la interfaz
+        
         crearInterfaz();
         formulario.eventoAgregar(e -> agregarProducto());
 
     }
 
 
-    // ========================================================
-    // CREAR INTERFAZ
-    // ========================================================
 
     private void crearInterfaz() {
 
@@ -49,9 +46,7 @@ public class GestorProductos extends JFrame {
         add(tablaProductos, BorderLayout.CENTER);
     }
 
-    // ========================================================
-    // AGREGAR O ACTUALIZAR PRODUCTO
-    // ========================================================
+ 
     private void agregarProducto() {
 
         Producto producto = formulario.crearProducto();
@@ -73,7 +68,7 @@ public class GestorProductos extends JFrame {
             return;
         }
 
-        // Si no existe, agregamos el nuevo producto a la tabla
+       
         tablaProductos.agregarProducto(producto);
         formulario.limpiarFormulario();
 
@@ -85,15 +80,12 @@ public class GestorProductos extends JFrame {
         );
     }
 
-    // ========================================================
-    // MAIN
-    // ========================================================
 
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
 
-            GestorProductos ventana = new GestorProductos();
+            Main ventana = new Main();
 
             ventana.setVisible(true);
         });
