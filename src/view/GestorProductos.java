@@ -64,35 +64,25 @@ public class GestorProductos extends JFrame {
         Producto productoExistente = tablaProductos.buscarPorCodigoBarras(producto.getCodigoBarras());
 
         if (productoExistente != null) {
-            // 2. Si ya existe, le sumamos el stock nuevo
-            int nuevoStock = productoExistente.getStock() + producto.getStock();
-            productoExistente.setStock(nuevoStock);
-
-            // Actualizamos la tabla para reflejar los cambios
-            tablaProductos.actualizarTabla();
-
             JOptionPane.showMessageDialog(
                     this,
-                    "El código de barras ya existe. Se han sumado " + producto.getStock() + " unidades al stock actual (Stock total: " + nuevoStock + ").",
-                    "Stock Actualizado",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "Ese código de barras ya está en uso con otro producto.",
+                    "Código de barras duplicado",
+                    JOptionPane.ERROR_MESSAGE
             );
-        } else {
-            // 3. Si no existe, agregamos el nuevo producto a la tabla
-            tablaProductos.agregarProducto(producto);
-
-    formulario.limpiarFormulario();
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Producto agregado correctamente.",
-                    "Información",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            return;
         }
 
-        // Limpiamos el formulario tras agregar o actualizar
+        // Si no existe, agregamos el nuevo producto a la tabla
+        tablaProductos.agregarProducto(producto);
         formulario.limpiarFormulario();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Producto agregado correctamente.",
+                "Información",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     // ========================================================

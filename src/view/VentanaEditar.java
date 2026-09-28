@@ -23,10 +23,12 @@ public class VentanaEditar extends JFrame {
     private JButton confirmar;
     private JButton cancelar;
     private Producto producto;
+    private Tabla tablaProductos;
     private Movimientos movimientos;
-    public VentanaEditar(Producto producto, Runnable alConfirmar) {
+    public VentanaEditar(Producto producto, Tabla tablaProductos, Runnable alConfirmar) {
 
         this.producto = producto;
+        this.tablaProductos = tablaProductos;
 
         setTitle("Editar producto");
         setSize(460, 390);
@@ -77,6 +79,18 @@ public class VentanaEditar extends JFrame {
         int stockAnterior = producto.getStock();
         double precioAnterior = producto.getPrecio();
         String categoriaAnterior = producto.getCategoria();
+
+        String nuevoCodigo = objetoCodigoBarrasEditar.getCodigoBarras();
+        if (!nuevoCodigo.equals(producto.getCodigoBarras())) {
+            Producto existente = tablaProductos.buscarPorCodigoBarras(nuevoCodigo);
+            if (existente != null && existente != producto) {
+                JOptionPane.showMessageDialog(this,
+                        "Ese código de barras ya pertenece a otro producto.",
+                        "Código duplicado",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
         
         String nuevoNombre = objetoNombreEditar.getNombre();
         double nuevoPrecio = objetoPrecioEditar.getPrecio();

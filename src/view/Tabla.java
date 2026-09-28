@@ -58,7 +58,7 @@ public class Tabla extends JPanel {
     }
 
     // ========================================================
-    // MÉTODO NUEVO: BUSCAR POR CÓDIGO DE BARRAS
+    // MÃ‰TODO NUEVO: BUSCAR POR CÃ“DIGO DE BARRAS
     // ========================================================
    public Producto buscarPorCodigoBarras(String codigoBarras) {
 
@@ -76,7 +76,7 @@ public class Tabla extends JPanel {
     return null;
 }
     // ========================================================
-    // MÉTODO NUEVO: REFRESCAR / ACTUALIZAR TABLA
+    // MÃ‰TODO NUEVO: REFRESCAR / ACTUALIZAR TABLA
     // ========================================================
     public void actualizarTabla() {
         dibujarLista();
@@ -114,7 +114,7 @@ public class Tabla extends JPanel {
                 dibujarLista();
             });
 
-            btnEditar.addActionListener(e -> new VentanaEditar(producto, () -> {
+            btnEditar.addActionListener(e -> new VentanaEditar(producto, this, () -> {
                 dibujarLista();
             }));
 
@@ -135,7 +135,7 @@ public class Tabla extends JPanel {
    private String codigoVisible(String codigo) {
 
     if (codigo == null || codigo.trim().isEmpty()) {
-        return "—";
+        return "â€”";
     }
     return codigo;
 }
