@@ -1,17 +1,15 @@
 package view;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import Model.Producto;
 import components.ComponenteBuscador;
 
@@ -57,9 +55,6 @@ public class Tabla extends JPanel {
         dibujarLista();
     }
 
-    // ========================================================
-    // MÃ‰TODO NUEVO: BUSCAR POR CÃ“DIGO DE BARRAS
-    // ========================================================
    public Producto buscarPorCodigoBarras(String codigoBarras) {
 
     if (codigoBarras == null || codigoBarras.trim().isEmpty()) {
@@ -75,9 +70,6 @@ public class Tabla extends JPanel {
 
     return null;
 }
-    // ========================================================
-    // MÃ‰TODO NUEVO: REFRESCAR / ACTUALIZAR TABLA
-    // ========================================================
     public void actualizarTabla() {
         dibujarLista();
     }
@@ -109,10 +101,28 @@ public class Tabla extends JPanel {
             fila.add(btnEliminar);
             fila.add(btnMovimientos);
 
-            btnEliminar.addActionListener(e -> {
-                listaProductos.remove(producto);
-                dibujarLista();
-            });
+           btnEliminar.addActionListener(e -> {
+
+    int respuesta = JOptionPane.showConfirmDialog(
+            this,
+            "¿Está seguro de que desea eliminar el producto " + producto.getNombre() + "?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+    );
+
+    if (respuesta == JOptionPane.YES_OPTION) {
+        listaProductos.remove(producto);
+        dibujarLista();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Producto eliminado correctamente.",
+                "Producto eliminado",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+});
 
             btnEditar.addActionListener(e -> new VentanaEditar(producto, this, () -> {
                 dibujarLista();
@@ -135,7 +145,7 @@ public class Tabla extends JPanel {
    private String codigoVisible(String codigo) {
 
     if (codigo == null || codigo.trim().isEmpty()) {
-        return "â€”";
+        return "—";
     }
     return codigo;
 }

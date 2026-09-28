@@ -111,6 +111,13 @@ public class VentanaEditar extends JFrame {
 
         alConfirmar.run();
 
+        JOptionPane.showMessageDialog(
+        this,
+        "Producto editado correctamente.",
+        "Edición exitosa",
+        JOptionPane.INFORMATION_MESSAGE
+);
+
         dispose();
     });
 }
