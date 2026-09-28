@@ -6,14 +6,14 @@ import javax.swing.*;
 public class ComponenteStock extends JPanel {
     private JTextField txtStock;
 
-    // Constructor sin parámetros
+    
     public ComponenteStock() {
         this(0); 
     }
 
-    // Constructor con parámetro (para cuando se edita un producto)
+   
     public ComponenteStock(int stock) {
-        // Establecer alineación a la izquierda
+        
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         add(new JLabel("Stock:"));
@@ -35,10 +35,28 @@ public class ComponenteStock extends JPanel {
     }
 
     public boolean validacionStock() {
+        if (getTexto().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El stock no puede estar vacío.");
+            return false;
+        }
+
         try {
             int val = Integer.parseInt(getTexto());
-            return val >= 0;
+
+            if (val <= 0) {
+                JOptionPane.showMessageDialog(this, "El stock debe ser mayor a 0.");
+                return false;
+            }
+
+            if (val > 100000) {
+                JOptionPane.showMessageDialog(this, "El stock no puede superar las 100.000 unidades.");
+                return false;
+            }
+
+            return true;
+
         } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El stock debe ser un número entero válido.");
             return false;
         }
     }
