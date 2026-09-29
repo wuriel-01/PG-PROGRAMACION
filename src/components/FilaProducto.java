@@ -67,4 +67,8 @@ public class FilaProducto extends JPanel {
      public void eventoVerMovimientos(ActionListener evento) {
         btnMovimientos.addActionListener(evento);
     }
+
+    public Producto getProducto() {
+    return producto;
+}
 }

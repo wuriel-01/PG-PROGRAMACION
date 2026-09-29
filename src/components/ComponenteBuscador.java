@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import components.FilaProducto;
 
 public class ComponenteBuscador extends JPanel {
 
@@ -48,23 +49,26 @@ public class ComponenteBuscador extends JPanel {
 
     private void filtrarProductos() {
 
-        String nombreBuscado = txtBuscar.getText().trim().toLowerCase(Locale.ROOT);
+    String busqueda = txtBuscar.getText().trim().toLowerCase(Locale.ROOT);
 
-        for (Component componente : panelProductos.getComponents()) {
+    for (Component componente : panelProductos.getComponents()) {
 
-            String nombreProducto = componente.getName();
+        if (componente instanceof FilaProducto) {
 
-            if (nombreProducto != null) {
+            FilaProducto fila = (FilaProducto) componente;
 
-                if (nombreProducto.toLowerCase(Locale.ROOT).contains(nombreBuscado)) {
-                    componente.setVisible(true);
-                } else {
-                    componente.setVisible(false);
-                }
+            String nombre = fila.getProducto().getNombre().toLowerCase(Locale.ROOT);
+            String codigo = fila.getProducto().getCodigoBarras().toLowerCase(Locale.ROOT);
+
+            if (nombre.contains(busqueda) || codigo.contains(busqueda)) {
+                componente.setVisible(true);
+            } else {
+                componente.setVisible(false);
             }
         }
-
-        panelProductos.revalidate();
-        panelProductos.repaint();
     }
+
+    panelProductos.revalidate();
+    panelProductos.repaint();
+}
 }
