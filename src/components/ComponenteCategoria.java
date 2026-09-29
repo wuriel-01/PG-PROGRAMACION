@@ -1,6 +1,7 @@
 package components;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -11,10 +12,14 @@ public class ComponenteCategoria extends JPanel {
     private JComboBox<String> cmbCategoria;
 
     public ComponenteCategoria() {
-        // Establecer alineación a la izquierda
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        setLayout(new BorderLayout(10, 0));
+
+        JLabel lblCategoria = new JLabel("Categoría:");
+        lblCategoria.setPreferredSize(new Dimension(120, 30));
 
         cmbCategoria = new JComboBox<>();
+        cmbCategoria.setPreferredSize(new Dimension(250, 30));
 
         cmbCategoria.addItem("Almacén");
         cmbCategoria.addItem("Bebidas");
@@ -22,8 +27,8 @@ public class ComponenteCategoria extends JPanel {
         cmbCategoria.addItem("Verduleria");
         cmbCategoria.addItem("Otros");
 
-        add(new JLabel("Categoria:"));
-        add(cmbCategoria);
+        add(lblCategoria, BorderLayout.WEST);
+        add(cmbCategoria, BorderLayout.CENTER);
     }
 
     public ComponenteCategoria(String categoriaSeleccionada) {
@@ -37,11 +42,19 @@ public class ComponenteCategoria extends JPanel {
     }
 
     public boolean validacionCategoria() {
+
         if (getCategoria().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe seleccionar una categoría.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
             cmbCategoria.requestFocusInWindow();
             return false;
         }
+
         return true;
     }
 

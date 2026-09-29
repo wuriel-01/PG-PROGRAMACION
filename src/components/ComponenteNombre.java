@@ -1,18 +1,25 @@
 package components;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.*;
 
 public class ComponenteNombre extends JPanel {
+
     private final JTextField txtNombre;
 
     public ComponenteNombre() {
-        // Establecer alineación a la izquierda
-        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(new JLabel("Nombre:"));
-        txtNombre = new JTextField(15);
-        add(txtNombre);
+        setLayout(new BorderLayout(10, 0));
+
+        JLabel lblNombre = new JLabel("Nombre:");
+        lblNombre.setPreferredSize(new Dimension(120, 30));
+
+        txtNombre = new JTextField();
+        txtNombre.setPreferredSize(new Dimension(250, 30));
+
+        add(lblNombre, BorderLayout.WEST);
+        add(txtNombre, BorderLayout.CENTER);
     }
 
     public ComponenteNombre(String nombre) {
@@ -33,15 +40,18 @@ public class ComponenteNombre extends JPanel {
     }
 
     public boolean validacionNombre() {
-      String  nombre= getTexto();
+        String nombre = getTexto();
+
         if (nombre.length() < 2 || nombre.length() > 30) {
             JOptionPane.showMessageDialog(this,
-                    "El nombre debe tener entre 2 y 30 dígitos.",
+                    "El nombre debe tener entre 2 y 30 caracteres.",
                     "Error de Validación",
                     JOptionPane.WARNING_MESSAGE);
+
             txtNombre.requestFocus();
             return false;
         }
+
         return true;
     }
 

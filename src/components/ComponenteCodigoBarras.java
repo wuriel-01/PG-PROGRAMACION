@@ -1,6 +1,7 @@
 package components;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -10,22 +11,26 @@ public class ComponenteCodigoBarras extends JPanel {
 
     private JTextField txtCodigoBarras;
 
-    // Constructor sin parámetros
     public ComponenteCodigoBarras() {
         this("");
     }
 
-    // Constructor con parámetro (para cuando se edita un producto)
     public ComponenteCodigoBarras(String codigo) {
-        // Establecer alineación a la izquierda
-        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(new JLabel("Código de Barras:"));
-        txtCodigoBarras = new JTextField(15);
+        setLayout(new BorderLayout(10, 0));
+
+        JLabel lblCodigo = new JLabel("Código de Barras:");
+        lblCodigo.setPreferredSize(new Dimension(120, 30));
+
+        txtCodigoBarras = new JTextField();
+        txtCodigoBarras.setPreferredSize(new Dimension(250, 30));
+
         if (codigo != null) {
             txtCodigoBarras.setText(codigo);
         }
-        add(txtCodigoBarras);
+
+        add(lblCodigo, BorderLayout.WEST);
+        add(txtCodigoBarras, BorderLayout.CENTER);
     }
 
     public String getTexto() {
@@ -39,7 +44,6 @@ public class ComponenteCodigoBarras extends JPanel {
     public boolean validacionCodigoBarras() {
         String codigo = getTexto();
 
-        // 1. Validar que no esté vacío
         if (codigo.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "El código de barras no puede estar vacío.",
@@ -49,7 +53,6 @@ public class ComponenteCodigoBarras extends JPanel {
             return false;
         }
 
-        // 2. Validar que contenga únicamente números
         if (!codigo.matches("\\d+")) {
             JOptionPane.showMessageDialog(this,
                     "El código de barras debe contener únicamente números.",
@@ -59,7 +62,6 @@ public class ComponenteCodigoBarras extends JPanel {
             return false;
         }
 
-        // 3. Validar longitud estándar (por ejemplo, entre 8 y 13 dígitos)
         if (codigo.length() < 8 || codigo.length() > 14) {
             JOptionPane.showMessageDialog(this,
                     "El código de barras debe tener entre 8 y 14 dígitos.",

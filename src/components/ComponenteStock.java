@@ -1,25 +1,30 @@
 package components;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.*;
 
 public class ComponenteStock extends JPanel {
+
     private JTextField txtStock;
 
-    
     public ComponenteStock() {
-        this(0); 
+        this(0);
     }
 
-   
     public ComponenteStock(int stock) {
-        
-        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        add(new JLabel("Stock:"));
-        txtStock = new JTextField(15);
+        setLayout(new BorderLayout(10, 0));
+
+        JLabel lblStock = new JLabel("Stock:");
+        lblStock.setPreferredSize(new Dimension(120, 30));
+
+        txtStock = new JTextField();
+        txtStock.setPreferredSize(new Dimension(250, 30));
         txtStock.setText(String.valueOf(stock));
-        add(txtStock);
+
+        add(lblStock, BorderLayout.WEST);
+        add(txtStock, BorderLayout.CENTER);
     }
 
     public String getTexto() {
@@ -35,6 +40,7 @@ public class ComponenteStock extends JPanel {
     }
 
     public boolean validacionStock() {
+
         if (getTexto().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El stock no puede estar vacío.");
             return false;

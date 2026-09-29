@@ -15,6 +15,10 @@ import Model.GestorProductos;
 import Model.Producto;
 import components.ComponenteBuscador;
 import components.FilaProducto;
+import javafx.geometry.Insets;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
 
 public class Tabla extends JPanel {
 
@@ -23,34 +27,38 @@ public class Tabla extends JPanel {
     private final GestorProductos gestorProductos;
     private final NumberFormat formatoMoneda;
 
-    public Tabla() {
-        setLayout(new BorderLayout(0, 8));
-        gestorProductos = new GestorProductos();
-        formatoMoneda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("es-AR"));
-        panelProductos = new JPanel();
-        panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+ public Tabla() {
+    setLayout(new BorderLayout(0, 8));
+    gestorProductos = new GestorProductos();
+    formatoMoneda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("es-AR"));
 
-        JPanel encabezado = new JPanel(new GridLayout(1, 9, 8, 4));
-        encabezado.add(new JLabel("Código"));
-        encabezado.add(new JLabel("Nombre"));
-        encabezado.add(new JLabel("Precio"));
-        encabezado.add(new JLabel("Stock"));
-        encabezado.add(new JLabel("Categoría"));
-        encabezado.add(new JLabel("Valor stock"));
-  
+    panelProductos = new JPanel();
+    panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
-        JPanel superior = new JPanel(new BorderLayout(0, 4));
-        superior.add(new ComponenteBuscador(panelProductos), BorderLayout.NORTH);
-        superior.add(encabezado, BorderLayout.SOUTH);
+    JPanel encabezado = new JPanel(new GridBagLayout());
+    String[] titulos = {"Código", "Nombre", "Precio", "Stock", "Categoría", "Valor stock", "Acciones"};
+    double[] anchos = {1.4, 1.5, 1, 0.7, 1.2, 1.2, 2.5};
 
-        add(superior, BorderLayout.NORTH);
-        add(new JScrollPane(panelProductos), BorderLayout.CENTER);
-
-        lblTotal = new JLabel();
-        add(lblTotal, BorderLayout.SOUTH);
-
-        actualizarTotal();
+    for (int i = 0; i < titulos.length; i++) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = i;
+        gbc.weightx = anchos[i];
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new java.awt.Insets(4, 8, 4, 8);
+        encabezado.add(new JLabel(titulos[i]), gbc);
     }
+
+    JPanel superior = new JPanel(new BorderLayout(0, 4));
+    superior.add(new ComponenteBuscador(panelProductos), BorderLayout.NORTH);
+    superior.add(encabezado, BorderLayout.SOUTH);
+
+    add(superior, BorderLayout.NORTH);
+    add(new JScrollPane(panelProductos), BorderLayout.CENTER);
+
+    lblTotal = new JLabel();
+    add(lblTotal, BorderLayout.SOUTH);
+    actualizarTotal();
+}
 
     public void agregarProducto(Producto producto) {
         gestorProductos.agregarProducto(producto);

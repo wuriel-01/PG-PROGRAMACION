@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,18 +26,19 @@ public class FormularioProducto extends JPanel {
     private ComponentePrecio objetoPrecio;
     private ComponenteCategoria objetoCategoria;
     private ComponenteCodigoBarras objetoCodigoBarras;
-    
+
     private JButton btnAgregar;
     private JButton btnLimpiar;
 
     public FormularioProducto() {
 
-        // Usamos GridBagLayout para un control preciso de la alineación y espacios
         setLayout(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10); // Márgenes internos (arriba, izquierda, abajo, derecha)
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Para que se ajusten bien
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(4, 10, 4, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
 
         objetoNombre = new ComponenteNombre();
         objetoCodigoBarras = new ComponenteCodigoBarras();
@@ -43,36 +46,41 @@ public class FormularioProducto extends JPanel {
         objetoStock = new ComponenteStock();
         objetoCategoria = new ComponenteCategoria();
 
-        // Fila 0: Nombre
-        gbc.gridx = 0;
         gbc.gridy = 0;
         add(objetoNombre, gbc);
 
-        // Fila 1: Código de Barras
         gbc.gridy = 1;
         add(objetoCodigoBarras, gbc);
 
-        // Fila 2: Precio
         gbc.gridy = 2;
         add(objetoPrecio, gbc);
 
-        // Fila 3: Stock
         gbc.gridy = 3;
         add(objetoStock, gbc);
 
-        // Fila 4: Categoría
         gbc.gridy = 4;
         add(objetoCategoria, gbc);
 
-        // Panel para los botones (así quedan centrados/alineados juntos y con tamaño normal)
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+
         btnAgregar = new JButton("Agregar");
         btnLimpiar = new JButton("Limpiar");
-        
+
+        btnAgregar.setPreferredSize(new Dimension(90, 30));
+        btnLimpiar.setPreferredSize(new Dimension(90, 30));
+
+        btnAgregar.setBackground(new Color(40, 167, 69));
+        btnAgregar.setForeground(Color.WHITE);
+
+        btnLimpiar.setBackground(new Color(108, 117, 125));
+        btnLimpiar.setForeground(Color.WHITE);
+
+        btnAgregar.setFocusPainted(false);
+        btnLimpiar.setFocusPainted(false);
+
         panelBotones.add(btnAgregar);
         panelBotones.add(btnLimpiar);
 
-        // Fila 5: Panel de Botones
         gbc.gridy = 5;
         add(panelBotones, gbc);
 
@@ -89,23 +97,11 @@ public class FormularioProducto extends JPanel {
 
     public Producto crearProducto() {
 
-        if (!objetoNombre.validacionNombre()) {
-            return null;
-        }
-
-        if (!objetoCodigoBarras.validacionCodigoBarras()) {
-            return null;
-        }
-
-        if (!objetoPrecio.validacionPrecio()) {
-            return null;
-        }
-
-        if (!objetoStock.validacionStock()) {
-            return null;
-        }
-
-        if (!objetoCategoria.validacionCategoria()) {
+        if (!objetoNombre.validacionNombre()
+                || !objetoCodigoBarras.validacionCodigoBarras()
+                || !objetoPrecio.validacionPrecio()
+                || !objetoStock.validacionStock()
+                || !objetoCategoria.validacionCategoria()) {
             return null;
         }
 
@@ -114,7 +110,7 @@ public class FormularioProducto extends JPanel {
         double precio = objetoPrecio.getPrecio();
         int stock = objetoStock.getStock();
         String categoria = objetoCategoria.getCategoria();
-        String id= UUID.randomUUID().toString();
+        String id = UUID.randomUUID().toString();
 
         return new Producto(codigoBarras, nombre, precio, stock, categoria, id);
     }
