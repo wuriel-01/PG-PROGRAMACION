@@ -33,10 +33,16 @@ public class ComponenteNombre extends JPanel {
     }
 
     public boolean validacionNombre() {
-        if (esValido()) return true;
-        JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error de validación", JOptionPane.ERROR_MESSAGE);
-        txtNombre.requestFocusInWindow();
-        return false;
+      String  nombre= getTexto();
+        if (nombre.length() < 2 || nombre.length() > 30) {
+            JOptionPane.showMessageDialog(this,
+                    "El nombre debe tener entre 2 y 30 dígitos.",
+                    "Error de Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            txtNombre.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     public void limpiarNombre() {

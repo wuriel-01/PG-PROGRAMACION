@@ -36,7 +36,7 @@ public class ComponentePrecio extends JPanel {
     public boolean esValido() {
         try {
             double precio = parsearPrecio();
-            return Double.isFinite(precio) && precio > 0;
+            return Double.isFinite(precio) && precio > 0  && precio <= 1000000;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -48,7 +48,7 @@ public class ComponentePrecio extends JPanel {
 
     public boolean validacionPrecio() {
         if (esValido()) return true;
-        JOptionPane.showMessageDialog(this, "Ingrese un precio mayor que cero. Puede usar coma o punto decimal.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Ingrese un precio mayor que cero y menor/igual que un millon. Puede usar coma o punto decimal.", "Error de validación", JOptionPane.ERROR_MESSAGE);
         txtPrecio.requestFocusInWindow();
         return false;
     }

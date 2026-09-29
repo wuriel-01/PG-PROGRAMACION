@@ -60,9 +60,9 @@ public class ComponenteCodigoBarras extends JPanel {
         }
 
         // 3. Validar longitud estándar (por ejemplo, entre 8 y 13 dígitos)
-        if (codigo.length() < 8 || codigo.length() > 13) {
+        if (codigo.length() < 8 || codigo.length() > 14) {
             JOptionPane.showMessageDialog(this,
-                    "El código de barras debe tener entre 8 y 13 dígitos.",
+                    "El código de barras debe tener entre 8 y 14 dígitos.",
                     "Error de Validación",
                     JOptionPane.WARNING_MESSAGE);
             txtCodigoBarras.requestFocus();
