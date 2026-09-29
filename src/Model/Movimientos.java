@@ -34,28 +34,28 @@ public class Movimientos {
         double NuevoPrecio=producto.getPrecio();
 
         if(!nombreAnterior.equals(NuevoNombre)){
-           cambio= new Cambio("Campo Nombre", NuevoNombre, nombreAnterior, uuid);
+           cambio= new Cambio("Campo Nombre", NuevoNombre, nombreAnterior);
            cambios.add(cambio);
         }
         if(!categoriaAnterior.equals(NuevaCategoria)){
-           cambio= new Cambio("Campo Categoria", NuevaCategoria, categoriaAnterior, uuid);
+           cambio= new Cambio("Campo Categoria", NuevaCategoria, categoriaAnterior);
            cambios.add(cambio);
         }
         if(!codigoBarraAnterior.equals(NuevoCodigoBarra)){
-           cambio= new Cambio("Campo Codigo de Barras", NuevoCodigoBarra, codigoBarraAnterior, uuid);
+           cambio= new Cambio("Campo Codigo de Barras", NuevoCodigoBarra, codigoBarraAnterior);
            cambios.add(cambio);
         }
         if (StockAnterior != NuevoStock) {
             String stockAnterior = String.valueOf(StockAnterior);
             String stockNuevo = String.valueOf(NuevoStock);  
-            cambio= new Cambio("Campo Stock",stockNuevo ,stockAnterior, uuid );
+            cambio= new Cambio("Campo Stock", stockNuevo , stockAnterior );
            cambios.add(cambio);
         }
 
-        if (StockAnterior != NuevoStock) {
+        if (precioAnterior != NuevoPrecio) {
             String PrecioAnterior = String.valueOf(precioAnterior);
             String precioNuevo = String.valueOf(NuevoPrecio);  
-            cambio= new Cambio("Campo Stock",precioNuevo ,PrecioAnterior, uuid );
+            cambio= new Cambio("Campo Precio", precioNuevo , PrecioAnterior );
            cambios.add(cambio);
         }
         
